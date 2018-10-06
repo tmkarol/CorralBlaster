@@ -2,7 +2,25 @@ var hexes=[];
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 canvas.addEventListener("mousedown", handleClick, false);
+var yourTurn = true;
 
+// Define board variables
+var numRows = 13;
+var numCols = 12;
+var startX = 40;
+var startY = 20;
+var sideLen = 20;
+var chanceOfWall = 22; // Chances will be 1 in chanceOfWall
+var blasterLoc = 150;
+
+// Start by drawing the board
+window.onload = drawBoard;
+
+// Function to define the set of points for a hexagon and
+// add said hexagon to the hexagon list
+// X: the top left x position of the hexagon
+// Y: the top right x position of the hexagon
+// sideLen: the length of each side of the hexagon
 function getPoints(X, Y, sideLen) {
 
 	var xPoints = [];
@@ -47,28 +65,23 @@ function getPoints(X, Y, sideLen) {
 	var hex={
 		Xpts: xPoints,
 		Ypts: yPoints,
-		color: "lawngreen"
+		color: "lawngreen",
 	}
 
 	hexes.push(hex);
 }
 
-window.onload = drawBoard;
-
+// Function to draw the board on the canvas 
+// Also initializes all of the hexagons
+// Takes no arguments
 function drawBoard() {
 
 	// Canvas background color
 	ctx.fillStyle = "white";
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-	// Draw hexagon grid
-	var numRows = 13;
-	var numCols = 12;
-	var startX = 40;
-	var startY = 20;
-	var sideLen = 20;
 	var i, j;
-
+	// Define all of the hexagons on the grid (get their points)
 	for (j = 0; j < numRows; j++) {
 		for (i = 0; i < numCols; i++) {
 			getPoints(startX + i*3*sideLen, startY + j*(sideLen * Math.sqrt(3)), sideLen);
@@ -78,11 +91,20 @@ function drawBoard() {
 		}
 	}
 
+	// Draw all of the hexagons on the canvas
 	for (i = 0; i < hexes.length; ++i) {
+		if (i == blasterLoc) {
+			hexes[i].color = "gray";
+		}
+		else if (Math.floor(Math.random() * chanceOfWall) == 1) {
+			hexes[i].color = "saddlebrown";
+		}
 		drawHex(hexes[i]);
 	}
 }
 
+// Function that defines the path around a hexagon
+// hex: the hexagon to define the path around
 function definePath(hex) {
 	var XPoints = hex.Xpts;
 	var YPoints = hex.Ypts;
@@ -93,32 +115,67 @@ function definePath(hex) {
 	}
 }
 
+// Function to draw a single hexagon on the canvas
+// hex: the hexagon to draw on the canvas
 function drawHex(hex) {
-
-	/*var XPoints = hex.Xpts;
-	var YPoints = hex.Ypts;
-	ctx.beginPath();
-	ctx.moveTo(XPoints[0], YPoints[0]);
-	for(var i = 1; i < XPoints.length; i++) {
-		ctx.lineTo(XPoints[i], YPoints[i]);
-	} */
 	definePath(hex);
 	ctx.fillStyle = hex.color;
 	ctx.fill();
 	ctx.stroke();
 }
 
+// Function to handle a click inside the canvas
+// This will put up a wall in the hexagon clicked
+// Nothing will happen if it is not the player's turn
+// e: the mouse click event
 function handleClick(e) {
-	var x = event.pageX;
-	var y = event.pageY;
-	x -= canvas.offsetLeft;
-  y -= canvas.offsetTop;
+	// Check that it's the user's turn
+	if (yourTurn) {
+		// Figure out where has been clicked
+		var x = event.pageX;
+		var y = event.pageY;
+		x -= canvas.offsetLeft;
+  	y -= canvas.offsetTop;
 
-  for (var i = 0; i < hexes.length; ++i) {
-  	definePath(hexes[i]);
-  	if (ctx.isPointInPath(x, y)) {
-  		hexes[i].color = "saddlebrown";
-  		drawHex(hexes[i]);
+  	// Figure out which hexagon has been clicked
+  	for (var i = 0; i < hexes.length; ++i) {
+  		definePath(hexes[i]);
+  		if (ctx.isPointInPath(x, y)) {
+  			// Check that the click selection is valid
+  			if (hexes[i].color == "lawngreen") {
+  				// Put up a wall, switch user turn to false
+  				hexes[i].color = "saddlebrown";
+  				drawHex(hexes[i]);
+  				yourTurn = false;
+  				blasterTurn();
+  			}
+  		}
   	}
-  }
+	}
+}
+
+function blasterTurn() {
+	// Move Blaster out of the previous spot
+	hexes[blasterLoc].color = "lawngreen";
+	drawHex(hexes[blasterLoc]);
+
+	// Choose next spot to enter
+	// Choices of offset to move away if Blaster is in an even numbered row
+	var evenChoice = [-2*numCols, -1*numCols-1, -1*numCols, numCols-1, numCols, numCols*2]; 
+	// Choices of offset to move away if Blaster is in an odd numbered row
+	var oddChoice = [-2*numCols, -1*numCols, -1*numCols+1, numCols, numCols+1, numCols*2];
+	var choiceI = Math.floor(Math.random() * 6); 
+	if(Math.floor(blasterLoc/numCols) % 2 == 0) {
+		blasterLoc += evenChoice[choiceI];
+	}
+	else {
+		blasterLoc += oddChoice[choiceI];
+	}
+
+	// Check to see if Blaster is still on the board
+
+	// Redraw blaster at new spot, set yourTurn to true
+	hexes[blasterLoc].color = "gray";
+	drawHex(hexes[blasterLoc]);
+	yourTurn = true;
 }

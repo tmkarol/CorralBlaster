@@ -1,8 +1,61 @@
+var hexes=[];
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+canvas.addEventListener("mousedown", handleClick, false);
+
+function getPoints(X, Y, sideLen) {
+
+	var xPoints = [];
+	var yPoints = [];
+	xPoints.push(X);
+	yPoints.push(Y);
+
+	// Top
+	X = X + sideLen;
+	xPoints.push(X);
+	yPoints.push(Y);
+
+	// Top right
+	X = X + sideLen/2;
+	Y = Y + sideLen/2 * Math.sqrt(3);
+	xPoints.push(X);
+	yPoints.push(Y);
+	       
+	// Bottom right
+	X = X - sideLen/2;
+	Y = Y + sideLen/2 * Math.sqrt(3);
+	xPoints.push(X);
+	yPoints.push(Y);
+
+	// Bottom
+	X = X - sideLen;
+	xPoints.push(X);
+	yPoints.push(Y);
+
+	// Bottom Left
+	X = X - sideLen/2;
+	Y = Y - sideLen/2 * Math.sqrt(3);
+	xPoints.push(X);
+	yPoints.push(Y);
+
+	// Top Left
+	X = X + sideLen/2;
+	Y = Y - sideLen/2 * Math.sqrt(3);
+	xPoints.push(X);
+	yPoints.push(Y);
+
+	var hex={
+		Xpts: xPoints,
+		Ypts: yPoints,
+		color: "lawngreen"
+	}
+
+	hexes.push(hex);
+}
+
 window.onload = drawBoard;
 
 function drawBoard() {
-	var canvas = document.getElementById("canvas");
-	var ctx = canvas.getContext("2d");
 
 	// Canvas background color
 	ctx.fillStyle = "white";
@@ -14,79 +67,58 @@ function drawBoard() {
 	var startX = 40;
 	var startY = 20;
 	var sideLen = 20;
-	var i;
-	for (i = 0; i < numRows; i++) {
-		drawRow(numCols, startX, startY + i*(sideLen * Math.sqrt(3)), sideLen);
+	var i, j;
+
+	for (j = 0; j < numRows; j++) {
+		for (i = 0; i < numCols; i++) {
+			getPoints(startX + i*3*sideLen, startY + j*(sideLen * Math.sqrt(3)), sideLen);
+		}
+		for (i = 0; i < numCols; i++) {
+			getPoints(startX + 1.5*sideLen + i*3*sideLen, startY + sideLen/2 * Math.sqrt(3) + j*(sideLen * Math.sqrt(3)), sideLen);
+		}
+	}
+
+	for (i = 0; i < hexes.length; ++i) {
+		drawHex(hexes[i]);
 	}
 }
 
-// Draws a single hexagon
-// X: x position for the top left corner
-// Y: y position for the top left corner
-// sideLen: length of each side of the hexagon
-function drawHex(X, Y, sideLen) {
-
-	var canvas = document.getElementById("canvas");
-	var ctx = canvas.getContext("2d");
-
-	// Top
+function definePath(hex) {
+	var XPoints = hex.Xpts;
+	var YPoints = hex.Ypts;
 	ctx.beginPath();
-	ctx.moveTo(X, Y);
-	X = X + sideLen;
-	ctx.lineTo(X, Y);
-	ctx.stroke();
+	ctx.moveTo(XPoints[0], YPoints[0]);
+	for(var i = 1; i < XPoints.length; i++) {
+		ctx.lineTo(XPoints[i], YPoints[i]);
+	}
+}
 
-	// Top right
-	ctx.beginPath();
-	ctx.moveTo(X, Y);
-	X = X + sideLen/2;
-	Y = Y + sideLen/2 * Math.sqrt(3);
-	ctx.lineTo(X, Y);
-	ctx.stroke();
-	       
-	// Bottom right
-	ctx.beginPath();
-	ctx.moveTo(X, Y);
-	X = X - sideLen/2;
-	Y = Y + sideLen/2 * Math.sqrt(3);
-	ctx.lineTo(X, Y);
-	ctx.stroke();
+function drawHex(hex) {
 
-	// Bottom
+	/*var XPoints = hex.Xpts;
+	var YPoints = hex.Ypts;
 	ctx.beginPath();
-	ctx.moveTo(X, Y);
-	X = X - sideLen;
-	ctx.lineTo(X, Y);
-	ctx.stroke();
-
-	// Bottom Left
-	ctx.beginPath();
-	ctx.moveTo(X, Y);
-	X = X - sideLen/2;
-	Y = Y - sideLen/2 * Math.sqrt(3);
-	ctx.lineTo(X, Y);
-	ctx.stroke();
-
-	// Top Left
-	ctx.beginPath();
-	ctx.moveTo(X, Y);
-	X = X + sideLen/2;
-	Y = Y - sideLen/2 * Math.sqrt(3);
-	ctx.lineTo(X, Y);
+	ctx.moveTo(XPoints[0], YPoints[0]);
+	for(var i = 1; i < XPoints.length; i++) {
+		ctx.lineTo(XPoints[i], YPoints[i]);
+	} */
+	definePath(hex);
+	ctx.fillStyle = hex.color;
+	ctx.fill();
 	ctx.stroke();
 }
 
-// Draws two rows of hexagons (offset)
-// numHexes: Number of hexagons per one row
-// startX: top left x position for first hexagon
-// startY: top left y position for first hexagon
-// sideLen: length of one side of a hexagon
-function drawRow(numHexes, startX, startY, sideLen) {
-	var i;
-	for (i = 0; i < numHexes; i++) {
-		drawHex(startX + i*3*sideLen, startY, sideLen);
-	}
-	for (i = 0; i < numHexes; i++) {
-		drawHex(startX + 1.5*sideLen + i*3*sideLen, startY + sideLen/2 * Math.sqrt(3), sideLen);
-	}
+function handleClick(e) {
+	var x = event.pageX;
+	var y = event.pageY;
+	x -= canvas.offsetLeft;
+  y -= canvas.offsetTop;
+
+  for (var i = 0; i < hexes.length; ++i) {
+  	definePath(hexes[i]);
+  	if (ctx.isPointInPath(x, y)) {
+  		hexes[i].color = "saddlebrown";
+  		drawHex(hexes[i]);
+  	}
+  }
 }

@@ -3,10 +3,14 @@
 // Bear to implement:
 -Drawing the hexagon grid
 
+// Other things we did
+-New functions (timeout)
+
 // Don't forget to reference that code we looked at (defining hex objects)
 // jsfiddle.net/m1erickson/wPMk5/
 
 // TODO:
+- Fix eating blaster bug
 - Game functionality
 - Blaster logic
 - Blaster photo

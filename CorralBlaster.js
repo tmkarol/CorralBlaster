@@ -147,7 +147,7 @@ function handleClick(e) {
   				hexes[i].color = "saddlebrown";
   				drawHex(hexes[i]);
   				yourTurn = false;
-  				blasterTurn();
+  				setTimeout(blasterTurn, 500);
   			}
   		}
   	}
@@ -159,19 +159,40 @@ function blasterTurn() {
 	hexes[blasterLoc].color = "lawngreen";
 	drawHex(hexes[blasterLoc]);
 
+	var tempLocation = -1000; // This number must be greater than -(numCols * 2)
+
 	// Choose next spot to enter
 	// Choices of offset to move away if Blaster is in an even numbered row
 	var evenChoice = [-2*numCols, -1*numCols-1, -1*numCols, numCols-1, numCols, numCols*2]; 
 	// Choices of offset to move away if Blaster is in an odd numbered row
 	var oddChoice = [-2*numCols, -1*numCols, -1*numCols+1, numCols, numCols+1, numCols*2];
-	var choiceI = Math.floor(Math.random() * 6); 
+	var choices;
+
+	// Get list of choices based off of which row Blaster is in
 	if(Math.floor(blasterLoc/numCols) % 2 == 0) {
-		blasterLoc += evenChoice[choiceI];
+		choices = evenChoice;
 	}
 	else {
-		blasterLoc += oddChoice[choiceI];
+		choices = oddChoice;
 	}
 
+	// Try choices until one is valid
+	while (tempLocation == -1000 && choices.length > 0) {
+		var choiceI = Math.floor(Math.random() * choices.length); 
+		tempLocation = blasterLoc + choices[choiceI];
+		if (hexes[tempLocation].color == "saddlebrown") {
+			choices.splice(choiceI, 1);
+			tempLocation = -1000;
+		}
+	}	
+
+	// Check to see if Blaster is stuck
+	if (choices.length == 0) {
+		alert("You win!");
+	}
+
+	blasterLoc = tempLocation;
+	
 	// Check to see if Blaster is still on the board
 
 	// Redraw blaster at new spot, set yourTurn to true

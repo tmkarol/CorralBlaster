@@ -180,6 +180,11 @@ function blasterTurn() {
 	while (tempLocation == -1000 && choices.length > 0) {
 		var choiceI = Math.floor(Math.random() * choices.length); 
 		tempLocation = blasterLoc + choices[choiceI];
+		// Check to see if Blaster is still on the board
+		if (tempLocation < 0 || tempLocation >= hexes.length) {
+			alert("You lose!");
+		}
+		// Check to see if this was a valid move
 		if (hexes[tempLocation].color == "saddlebrown") {
 			choices.splice(choiceI, 1);
 			tempLocation = -1000;
@@ -192,8 +197,6 @@ function blasterTurn() {
 	}
 
 	blasterLoc = tempLocation;
-	
-	// Check to see if Blaster is still on the board
 
 	// Redraw blaster at new spot, set yourTurn to true
 	hexes[blasterLoc].color = "gray";

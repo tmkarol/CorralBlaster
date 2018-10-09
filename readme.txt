@@ -10,8 +10,9 @@
 // jsfiddle.net/m1erickson/wPMk5/
 
 // TODO:
-- Game functionality
-- Blaster logic
-- Blaster photo
+- Game functionality (End conditions so it doesn't error)
+- Blaster logic (better than random?)
+- Blaster photo (on gray hexagon)
 - 3 CSS3 features
-- High Score API
+- Add in High Score API
+- Write out README file

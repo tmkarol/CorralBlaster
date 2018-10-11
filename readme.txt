@@ -18,8 +18,10 @@ OTHER COOL & DIFFICULT FEATURES:
 		To implement the game board, we also had to learn how to use JavaScript classes to keep track of each hexagon,
 		its location, and its shape. For reference on this, we looked at example code on how to make abnormal shape classes
 		(jsfiddle.net/m1erickson/wPMk5/). While this example code did not tell us explicitly how to make hexagons or draw them
-		in a grid, it gave us a good starting point for the logic of drawing and detecting clicks in multiple abnormal shapes. 
-        We also used a lot of jQuery for controlling the CSS3 animations and adding some user interaction to restart the game.
+		in a grid, it gave us a good starting point for the logic of drawing and detecting clicks in multiple abnormal shapes.
+		
+-JQuery
+        	We used a lot of jQuery for controlling the CSS3 animations and adding some user interaction to restart the game.
 
 -New Functions
 		To make our game flow more smoothly, we also looked into other, new JavaScript functions, such as timeout(). Timeout 

@@ -3,6 +3,7 @@ var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 canvas.addEventListener("mousedown", handleClick, false);
 var yourTurn = true;
+var score = 156;
 
 // Define board variables
 var numRows = 13;
@@ -13,8 +14,13 @@ var sideLen = 20;
 var chanceOfWall = 22; // Chances will be 1 in chanceOfWall
 var blasterLoc = 150;
 
-// Start by drawing the board
-window.onload = drawBoard;
+$(document).ready(function(){
+	// Start by drawing the board
+	drawBoard();
+
+	//HighScoreAPI call
+	update_scores();
+});
 
 // Function to define the set of points for a hexagon and
 // add said hexagon to the hexagon list
@@ -135,7 +141,7 @@ function handleClick(e) {
 		var x = event.pageX;
 		var y = event.pageY;
 		x -= canvas.offsetLeft;
-  	y -= canvas.offsetTop;
+  		y -= canvas.offsetTop;
 
   	// Figure out which hexagon has been clicked
   	for (var i = 0; i < hexes.length; ++i) {
@@ -143,6 +149,7 @@ function handleClick(e) {
   		if (ctx.isPointInPath(x, y)) {
   			// Check that the click selection is valid
   			if (hexes[i].color == "lawngreen") {
+  				--score;
   				// Put up a wall, switch user turn to false
   				hexes[i].color = "saddlebrown";
   				drawHex(hexes[i]);
@@ -193,7 +200,7 @@ function blasterTurn() {
 
 	// Check to see if Blaster is stuck
 	if (choices.length == 0) {
-		alert("You win!");
+		highscore(score);
 	}
 
 	blasterLoc = tempLocation;

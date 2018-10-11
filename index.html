@@ -9,9 +9,29 @@
 	<meta name="authors" content="Anna Nienhaus, Erica Manzer, Tracy Karol">
 	<meta name="assignment" content="CSCI 445: JavaScript Game">
 	<meta name="viewport" content="width=device-width">
+	<link rel="stylesheet" href="highscore.css">
+	<script src="jquery-3.2.1.min.js"></script>
+	<script src="CorralBlaster.js" defer></script>
+	<script type="text/javascript" src="HighscoreAPI.js"></script>
 </head>
 
 <body>
+	<div id="highdiv">
+		<table id="hightable">
+			<tr>
+				<th>User</th>
+				<th>Score</th>
+			</tr>
+		</table>
+		<table id="myhightable">
+			<tr>
+				<th colspan="2">Your High Score</th>
+			</tr>
+			<tr id="myhighscore">
+				<td colspan="2">You don't have one yet!</td>
+			</tr>
+		</table>
+	</div>
 	<header>
 		<h1>Corral Blaster!</h1>
 	</header>
@@ -20,8 +40,6 @@
 	</section>
 	<footer>
 	</footer>
-	<script src="jquery-3.2.1.min.js"></script>
-	<script src="CorralBlaster.js"></script>
 </body>
 
 </html>

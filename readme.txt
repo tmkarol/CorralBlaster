@@ -32,4 +32,4 @@ OTHER COOL & DIFFICULT FEATURES:
 - Blaster logic (better than random?)
 - 3 CSS3 features
 - Write out README file
-
+- Instructions

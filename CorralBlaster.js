@@ -190,6 +190,9 @@ function blasterTurn() {
 		// Check to see if Blaster is still on the board
 		if (tempLocation < 0 || tempLocation >= hexes.length) {
 			alert("You lose!");
+				blasterLoc = 150;
+				hexes.clear();
+				drawBoard();
 		}
 		// Check to see if this was a valid move
 		if (hexes[tempLocation].color == "saddlebrown") {
@@ -201,9 +204,13 @@ function blasterTurn() {
 	// Check to see if Blaster is stuck
 	if (choices.length == 0) {
 		highscore(score);
+		blasterLoc = 150;
+		hexes = [];
+		drawBoard();
 	}
-
-	blasterLoc = tempLocation;
+	else {
+		blasterLoc = tempLocation;
+	}
 
 	// Redraw blaster at new spot, set yourTurn to true
 	hexes[blasterLoc].color = "gray";

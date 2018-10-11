@@ -3,7 +3,7 @@ var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 canvas.addEventListener("mousedown", handleClick, false);
 var yourTurn = true;
-var score = 156;
+var score = 312;
 
 // Define board variables
 var numRows = 13;

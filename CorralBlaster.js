@@ -17,13 +17,16 @@ var img = new Image();
 img.src = "thumbnail.png";
 
 $(document).ready(function(){
+	window.alert('Welcome to Corral Blaster! Click on the hexagon to block Blaster from getting closer to the edge! ' +
+		'Once you have him surrounded you win! Earn a higher score by using less clicks!');
+	
 	// Start by drawing the board
 	drawBoard();
 
 	//HighScoreAPI call
 	update_scores();
 
-	$("#endGame").css({'height': '350', 'width': '500', 'position': 'absolute', 'left': '5%', 'top': '20%', 'visibility': 'hidden'});
+	$("#endGame").css({'height': '350', 'width': '500', 'left': '5%', 'top': '20%'});
 	$("img").css({'height': '400', 'width': '400'})
 });
 

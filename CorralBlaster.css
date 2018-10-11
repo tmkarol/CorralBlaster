@@ -1,5 +1,6 @@
 h1 {
 	text-align: center;
+    color: white;
 }
 
 #canvas {
@@ -7,4 +8,9 @@ h1 {
 	margin: auto; 
 	padding: 0; 
 	display: block;
+}
+
+body {
+    font-family: 'Josefin Slab', serif;
+    background-image: linear-gradient(to right, blue, green);
 }

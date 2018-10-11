@@ -1,6 +1,10 @@
-h1 {
+h1, p{
 	text-align: center;
     color: white;
+}
+
+p {
+    margin-bottom: 20px;
 }
 
 #canvas {
@@ -13,4 +17,16 @@ h1 {
 body {
     font-family: 'Josefin Slab', serif;
     background-image: linear-gradient(to right, blue, green);
+}
+
+.animated {
+    animation: movement 5s linear;
+}
+
+@keyframes movement {
+    0%   {left:0px;}
+    25%  {left:200px;}
+    50%  {left:400px;}
+    75%  {left:600px;}
+    100% {left:800px;}
 }

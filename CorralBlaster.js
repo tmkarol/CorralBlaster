@@ -22,6 +22,9 @@ $(document).ready(function(){
 
 	//HighScoreAPI call
 	update_scores();
+
+	$("#endGame").css({'height': '350', 'width': '500', 'position': 'absolute', 'left': '5%', 'top': '20%', 'visibility': 'hidden'});
+	$("img").css({'height': '400', 'width': '400'})
 });
 
 // Function to define the set of points for a hexagon and
@@ -140,6 +143,7 @@ function drawHex(hex) {
 // Nothing will happen if it is not the player's turn
 // e: the mouse click event
 function handleClick(e) {
+	console.log('here');
 	// Check that it's the user's turn
 	if (yourTurn) {
 		// Figure out where has been clicked
@@ -194,10 +198,10 @@ function blasterTurn() {
 		tempLocation = blasterLoc + choices[choiceI];
 		// Check to see if Blaster is still on the board
 		if (tempLocation < 0 || tempLocation >= hexes.length) {
-			alert("You lose!");
-				blasterLoc = 150;
-				hexes.clear();
-				drawBoard();
+			blasterLoc = 150;
+			hexes = [];
+			$('#endGame').css('visibility', 'visible').addClass('animated');
+			$('#endMessage').html('Blaster got away! Click me to restart the game!')
 		}
 		// Check to see if this was a valid move
 		if (hexes[tempLocation].color == "saddlebrown") {
@@ -208,17 +212,25 @@ function blasterTurn() {
 
 	// Check to see if Blaster is stuck
 	if (choices.length == 0) {
-		highscore(score);
 		blasterLoc = 150;
 		hexes = [];
-		drawBoard();
+		$('#endGame').css('visibility', 'visible').addClass('animated');
+		$('#endMessage').html('You caught Blaster! Click me to restart the game!')
+		highscore(score);
 	}
 	else {
 		blasterLoc = tempLocation;
+		// Redraw blaster at new spot, set yourTurn to true
+		hexes[blasterLoc].color = "white";
+		drawHex(hexes[blasterLoc]);
 	}
 
-	// Redraw blaster at new spot, set yourTurn to true
-	hexes[blasterLoc].color = "white";
-	drawHex(hexes[blasterLoc]);
 	yourTurn = true;
 }
+
+$('#endMessage').click(function(){
+	$('#endGame').css('visibility', 'hidden').removeClass('animated');
+	$('#endMessage').html('');
+	yourTurn = true;
+	drawBoard();
+})

@@ -13,6 +13,8 @@ var startY = 20;
 var sideLen = 20;
 var chanceOfWall = 22; // Chances will be 1 in chanceOfWall
 var blasterLoc = 150;
+var img = new Image();
+img.src = "thumbnail.png";
 
 $(document).ready(function(){
 	// Start by drawing the board
@@ -100,7 +102,7 @@ function drawBoard() {
 	// Draw all of the hexagons on the canvas
 	for (i = 0; i < hexes.length; ++i) {
 		if (i == blasterLoc) {
-			hexes[i].color = "gray";
+			hexes[i].color = "white";
 		}
 		else if (Math.floor(Math.random() * chanceOfWall) == 1) {
 			hexes[i].color = "saddlebrown";
@@ -127,6 +129,9 @@ function drawHex(hex) {
 	definePath(hex);
 	ctx.fillStyle = hex.color;
 	ctx.fill();
+	if(hex.color == "white"){
+		ctx.drawImage(img, hex.Xpts[0] - 3, hex.Ypts[0], 30,30);
+	}
 	ctx.stroke();
 }
 
@@ -148,16 +153,16 @@ function handleClick(e) {
   		definePath(hexes[i]);
   		if (ctx.isPointInPath(x, y)) {
   			// Check that the click selection is valid
-  			if (hexes[i].color == "lawngreen") {
-  				--score;
-  				// Put up a wall, switch user turn to false
-  				hexes[i].color = "saddlebrown";
-  				drawHex(hexes[i]);
-  				yourTurn = false;
-  				setTimeout(blasterTurn, 500);
+	  			if (hexes[i].color == "lawngreen") {
+	  				--score;
+	  				// Put up a wall, switch user turn to false
+	  				hexes[i].color = "saddlebrown";
+	  				drawHex(hexes[i]);
+	  				yourTurn = false;
+	  				setTimeout(blasterTurn, 500);
+	  			}
   			}
   		}
-  	}
 	}
 }
 
@@ -213,7 +218,7 @@ function blasterTurn() {
 	}
 
 	// Redraw blaster at new spot, set yourTurn to true
-	hexes[blasterLoc].color = "gray";
+	hexes[blasterLoc].color = "white";
 	drawHex(hexes[blasterLoc]);
 	yourTurn = true;
 }

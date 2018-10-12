@@ -146,7 +146,7 @@ function drawHex(hex) {
 // Nothing will happen if it is not the player's turn
 // e: the mouse click event
 function handleClick(e) {
-	console.log('here');
+	//console.log('here');
 	// Check that it's the user's turn
 	if (yourTurn) {
 		// Figure out where has been clicked
@@ -179,6 +179,13 @@ function blasterTurn() {
 	drawHex(hexes[blasterLoc]);
 
 	var tempLocation = -1000; // This number must be greater than -(numCols * 2)
+	var blasterRow = Math.floor(blasterLoc/numCols);
+	if (blasterRow % 2 == 0) {
+		var blasterCol = blasterLoc % (numCols*2);
+	}
+	else {
+		var blasterCol = (blasterLoc-numCols) % (numCols*2); 
+	}
 
 	// Choose next spot to enter
 	// Choices of offset to move away if Blaster is in an even numbered row
@@ -188,7 +195,7 @@ function blasterTurn() {
 	var choices;
 
 	// Get list of choices based off of which row Blaster is in
-	if(Math.floor(blasterLoc/numCols) % 2 == 0) {
+	if (blasterRow % 2 == 0) {
 		choices = evenChoice;
 	}
 	else {
@@ -199,13 +206,30 @@ function blasterTurn() {
 	while (tempLocation == -1000 && choices.length > 0) {
 		var choiceI = Math.floor(Math.random() * choices.length); 
 		tempLocation = blasterLoc + choices[choiceI];
+
 		// Check to see if Blaster is still on the board
+		var offBoard = false;
 		if (tempLocation < 0 || tempLocation >= hexes.length) {
+			offBoard = true;
+		}
+		else if (blasterCol == 0 && blasterRow % 2 == 0) {
+			if (choices[choiceI] == numCols-1 || choices[choiceI] == -1*numCols-1) {
+				offBoard = true;
+			}
+		}
+		else if (blasterCol == numCols-1 && blasterRow % 2 == 1) {
+			if (choices[choiceI] == -1*numCols+1 || choices[choiceI] == numCols+1) {
+				offBoard == true;
+			}
+		}
+
+		if (offBoard) {
 			blasterLoc = 150;
 			hexes = [];
 			$('#endGame').css('visibility', 'visible').addClass('animated');
 			$('#endMessage').html('Blaster got away! Click me to restart the game!')
 		}
+
 		// Check to see if this was a valid move
 		if (hexes[tempLocation].color == "saddlebrown") {
 			choices.splice(choiceI, 1);

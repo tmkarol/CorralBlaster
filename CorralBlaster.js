@@ -213,14 +213,10 @@ function blasterTurn() {
 			offBoard = true;
 		}
 		else if (blasterCol == 0 && blasterRow % 2 == 0) {
-			if (choices[choiceI] == numCols-1 || choices[choiceI] == -1*numCols-1) {
-				offBoard = true;
-			}
+			offBoard = true;
 		}
 		else if (blasterCol == numCols-1 && blasterRow % 2 == 1) {
-			if (choices[choiceI] == -1*numCols+1 || choices[choiceI] == numCols+1) {
-				offBoard == true;
-			}
+			offBoard = true;
 		}
 
 		if (offBoard) {

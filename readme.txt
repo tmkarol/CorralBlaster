@@ -27,3 +27,6 @@ OTHER COOL & DIFFICULT FEATURES:
 		To make our game flow more smoothly, we also looked into other, new JavaScript functions, such as timeout(). Timeout 
 		allowed us to pause the JavaScript for a set amount of time. We used this so that Blaster would not take his turn 
 		instantly after the player, but would instead wait a moment so it looked more like playing against another human.
+-Movement AI
+		The AI that allows Blaster to take his turn is a random AI. It selects from any of the bordering cells that do 
+		not have a wall. A list of potential cells is made and a random number is generated for the actual choice. 
